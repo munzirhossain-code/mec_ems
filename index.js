@@ -5,7 +5,10 @@ const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 const { urlencoded } = require("body-parser");
 const jwt = require("jsonwebtoken");
-
+const allowedOrigins = [
+  'http://localhost:3000',,
+  'https://mec-ems.web.app'
+];
 
 
 mongoose.connect(process.env.MONGO_URL)
@@ -21,11 +24,15 @@ app.use(express.urlencoded({extended:false}))
 app.use(express.static('Public'))
 
 app.use(cors({
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    credentials: true,
-    origin: (origin, callback) => {
-        callback(null, origin || '*'); // Allows all origins
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
     }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true
 }));
 
 
