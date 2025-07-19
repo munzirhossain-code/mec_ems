@@ -48,6 +48,9 @@ const verifyuser = (req,res,next)=>{
 app.get('/verify',verifyuser,(req,res)=>{
     return res.json({Status:true, role:req.role, id:req.id})
 })
+app.get('/info',(req,res)=>{
+    return res.send("running")
+})
 
 app.listen(8000,()=>{
     console.log("Listening at port 8000")
